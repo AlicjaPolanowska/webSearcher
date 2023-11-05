@@ -1,0 +1,4 @@
+# webSearcher gitignore
+/venv/
+/__pycache__/
+/.idea/
