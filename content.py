@@ -7,5 +7,5 @@ def read_url(url: str):
         return html.decode("utf-8")
 
 
-def get_page_hrefs(page: str, splitter: str = '\n', content: str = 'href'):
-    return set(x for x in page.split(splitter) if x.find(content) > -1)
+def get_page_hrefs(page: str, splitter: str = '\n'):
+    return set(x[x.index('href="http')+6:x.index('"', x.index('href="http')+6)] for x in page.split(splitter) if x.find('href="http') > -1)
