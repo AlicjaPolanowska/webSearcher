@@ -40,17 +40,22 @@ class Graph:
         for n in self[item]:
             if n not in visited:
                 return self.custom_iter(n, visited)
-        if item.index != self.root.index:
+        if item in visited and item.index != self.root.index:
             return self.custom_iter(self.get_vertex_by_index(item.previous), visited)
         return visited
 
+    def vertex_exists(self, url):
+        return url in [x.url for x in self.vertices]
 
     def add_vertex(self, url: str, previous: int):
+        if self.vertex_exists(url):
+            return -1
         index = len(self.vertices)
         vertex = Vertex(index, url, previous)
         if index == 0:
             self.root = vertex
         self.vertices.append(vertex)
+        return index
 
     def remove_vertex(self, index: int):
         if len(self.vertices) == 1:

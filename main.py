@@ -17,7 +17,13 @@ def graph_from_page(root: str, page: str):
     graph.add_vertex(root, None)
     hrefs = content.get_page_hrefs(page)
     for y in hrefs:
-        graph.add_vertex(y, 0)
+        idx = graph.add_vertex(y, 0)
+        if idx == -1:
+            continue
+        page_inner = content.read_url(y)
+        hrefs_inner = content.get_page_hrefs(page_inner)
+        for z in hrefs_inner:
+            graph.add_vertex(z, idx)
     return graph
 
 
@@ -31,6 +37,7 @@ if __name__ == '__main__':
     print(g)
     end = time.time()
     print(end-start)
+    print(len(g.vertices))
     #cProfile.run('print(g)')
     #0.0030341148376464844
     #dfs.run()
