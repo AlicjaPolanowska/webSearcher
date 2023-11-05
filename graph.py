@@ -32,14 +32,17 @@ class Graph:
         for x in self.custom_iter(self.root):
             yield x
 
-    def custom_iter(self, item, visited = None):
+    def custom_iter(self, item, visited=None):
         if visited is None:
             visited = []
-        visited.append(item)
+        if item not in visited:
+            visited.append(item)
         for n in self[item]:
             if n not in visited:
-                yield from self.custom_iter(n, visited)
-        yield item
+                return self.custom_iter(n, visited)
+        if item.index != self.root.index:
+            return self.custom_iter(self.get_vertex_by_index(item.previous), visited)
+        return visited
 
 
     def add_vertex(self, url: str, previous: int):
@@ -53,6 +56,9 @@ class Graph:
         if len(self.vertices) == 1:
             self.root = None
         return self.vertices.pop(index)
+
+    def get_vertex_by_index(self, index: int):
+        return self.vertices.copy()[index:index+1][0]
 
     def is_empty(self):
         return self.root is None
